@@ -1,0 +1,30 @@
+# Environment
+.env
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Output files
+saved_songs.md
+playlist.txt
+
+# OS
+.DS_Store
+Thumbs.db
