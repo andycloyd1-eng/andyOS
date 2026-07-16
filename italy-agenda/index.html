@@ -1,0 +1,859 @@
+<title>Andy & Kiki — Tuscany & the Argentario</title>
+<style>
+  :root{
+    /* considered neutrals with a warm plaster bias */
+    --paper:#EFE6D5;
+    --plaster:#E7DAC3;
+    --stone:#DBCAAE;
+    --ink:#2A2019;
+    --ink-soft:#5B4E41;
+    --line:rgba(42,32,25,.14);
+    /* place accents */
+    --chianti:#6E2438;   /* wine — hero ground */
+    --chianti-deep:#4A1626;
+    --cotto:#B4522E;     /* Florence */
+    --olive:#6A7141;     /* Chianti countryside */
+    --sea:#1E7A8C;       /* Argentario coast */
+    --gold:#B0853A;      /* Rome travertine */
+    --slate:#586674;     /* London */
+    /* default accent (overridden per chapter) */
+    --accent:var(--cotto);
+    --accent-ink:#7a3620;
+
+    --serif:'Palatino Linotype','Book Antiqua',Palatino,'URW Palladio L',Georgia,serif;
+    --sans:'Avenir Next','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+
+    --maxw:1120px;
+    --r:14px;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+
+  h1,h2,h3,.serif{font-family:var(--serif)}
+  h2{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.04;margin:0;text-wrap:balance;letter-spacing:-.01em}
+  h3{margin:0}
+  .kicker{font-family:var(--sans);text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;font-weight:700}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+  a{color:inherit}
+  button{font-family:inherit}
+  :focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;color:#F3E7D0;
+    background:
+      radial-gradient(120% 80% at 78% 12%,rgba(176,133,58,.30),transparent 55%),
+      radial-gradient(120% 90% at 12% 95%,rgba(30,122,140,.28),transparent 55%),
+      linear-gradient(160deg,var(--chianti) 0%,var(--chianti-deep) 78%);
+    padding:clamp(48px,8vw,88px) 0 clamp(40px,6vw,64px);
+    overflow:hidden;
+  }
+  .hero::after{ /* faint plaster grain */
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+    background-image:radial-gradient(rgba(255,240,214,.06) 1px,transparent 1.4px);
+    background-size:5px 5px;mix-blend-mode:overlay;
+  }
+  .hero .wrap{position:relative;z-index:2}
+  .hero-eyebrow{color:#E9C889;letter-spacing:.28em}
+  .hero h1{
+    font-size:clamp(2.6rem,7.2vw,5.4rem);line-height:.98;margin:.28em 0 .1em;
+    letter-spacing:-.02em;text-wrap:balance;color:#FBF1DE;
+  }
+  .hero h1 em{font-style:italic;color:#E9B96C}
+  .hero-sub{font-size:clamp(1rem,2.2vw,1.28rem);color:#EAD9BC;max-width:44ch}
+  .hero-sub b{color:#F6E9CF;font-weight:600}
+
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;margin-top:8px}
+  @media (max-width:820px){.hero-grid{grid-template-columns:1fr;gap:22px}}
+
+  .facts{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+  .fact{
+    background:rgba(255,240,214,.09);border:1px solid rgba(255,240,214,.22);
+    border-radius:999px;padding:8px 15px;font-size:.86rem;backdrop-filter:blur(2px);
+  }
+  .fact b{color:#F0DCB6}
+
+  /* countdown */
+  .count{display:flex;gap:14px;margin-top:26px}
+  .count .cell{
+    background:rgba(0,0,0,.18);border:1px solid rgba(255,240,214,.18);
+    border-radius:12px;padding:10px 14px;min-width:66px;text-align:center;
+  }
+  .count .num{font-family:var(--serif);font-size:1.9rem;line-height:1;color:#F6E4C2;font-variant-numeric:tabular-nums}
+  .count .lab{font-size:.62rem;text-transform:uppercase;letter-spacing:.18em;color:#D8BE93;margin-top:6px}
+
+  /* route map */
+  .map-card{
+    background:rgba(255,240,214,.05);border:1px solid rgba(255,240,214,.16);
+    border-radius:18px;padding:14px;
+  }
+  .map-card svg{width:100%;height:auto;display:block}
+  .route{fill:none;stroke:#E9B96C;stroke-width:2.4;stroke-linecap:round;stroke-dasharray:7 8}
+  .route-draw{stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 3.4s ease .35s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @media (prefers-reduced-motion:reduce){.route-draw{animation:none;stroke-dashoffset:0;stroke-dasharray:7 8}}
+  .land{fill:rgba(255,240,214,.07);stroke:rgba(255,240,214,.22);stroke-width:1}
+  .isle{fill:rgba(30,122,140,.30);stroke:rgba(233,185,108,.55);stroke-width:1.2}
+  .node circle{fill:#4A1626;stroke:#E9B96C;stroke-width:2.4}
+  .node.big circle{fill:#B4522E;stroke:#F6E4C2}
+  .node text{fill:#F3E7D0;font-family:var(--sans);font-size:12.5px;font-weight:600}
+  .node .sm{fill:#D8BE93;font-size:10px;font-weight:500}
+  .sea-label{fill:rgba(233,185,108,.5);font-family:var(--serif);font-style:italic;font-size:13px}
+  /* fun map bits */
+  .map-emoji{font-size:15px}
+  .bob,.bob2,.bob3{transform-box:fill-box;transform-origin:center}
+  .bob{animation:bob 3s ease-in-out infinite}
+  .bob2{animation:bob 3.8s ease-in-out .7s infinite}
+  .bob3{animation:bob 4.4s ease-in-out 1.3s infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  .wave{fill:none;stroke:rgba(126,200,214,.55);stroke-width:1.6;stroke-linecap:round;transform-box:fill-box;transform-origin:center;animation:drift 5.5s ease-in-out infinite}
+  .wave.w2{animation-delay:1.2s}
+  .wave.w3{animation-delay:2.4s}
+  @keyframes drift{0%,100%{transform:translateX(0)}50%{transform:translateX(7px)}}
+  .sunball{fill:#E9B96C}
+  .sunrays{stroke:#E9B96C;stroke-width:2;stroke-linecap:round;opacity:.75;transform-box:fill-box;transform-origin:center;animation:sunspin 36s linear infinite}
+  @keyframes sunspin{to{transform:rotate(360deg)}}
+  .hop{fill:none;stroke:#7EC8D6;stroke-width:2.2;stroke-linecap:round;stroke-dasharray:3 7}
+  @media (prefers-reduced-motion:reduce){.bob,.bob2,.bob3,.wave,.sunrays{animation:none}}
+
+  .scrollcue{margin-top:30px;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:#D8BE93;display:flex;align-items:center;gap:10px}
+  .scrollcue::before{content:"";width:34px;height:1px;background:#D8BE93}
+
+  /* ============ STICKY NAV ============ */
+  nav.bar{
+    position:sticky;top:0;z-index:50;background:rgba(239,230,213,.86);
+    backdrop-filter:blur(9px);border-bottom:1px solid var(--line);
+  }
+  nav.bar .row{display:flex;align-items:center;gap:6px;max-width:var(--maxw);margin:0 auto;padding:9px 24px}
+  nav.bar .brand{font-family:var(--serif);font-weight:600;font-size:1rem;margin-right:auto;letter-spacing:.01em}
+  nav.bar a.link{
+    text-decoration:none;font-size:.82rem;font-weight:600;color:var(--ink-soft);
+    padding:7px 12px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s;
+  }
+  nav.bar a.link:hover{background:rgba(42,32,25,.07);color:var(--ink)}
+  nav.bar a.link.active{background:var(--ink);color:var(--paper)}
+  .navscroll{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+  .navscroll::-webkit-scrollbar{display:none}
+  .savebtn{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    border-radius:999px;padding:7px 13px;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;
+    display:inline-flex;align-items:center;gap:6px;transition:background .2s;
+  }
+  .savebtn:hover{background:rgba(42,32,25,.07)}
+  .savebtn .star{color:var(--cotto)}
+  @media (max-width:680px){nav.bar .brand{display:none}}
+
+  /* ============ SECTIONS ============ */
+  section.chapter{padding:clamp(56px,8vw,96px) 0;scroll-margin-top:64px;position:relative}
+  section.chapter.alt{background:linear-gradient(180deg,var(--plaster),var(--paper))}
+
+  .chap-head{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start;margin-bottom:34px}
+  @media (max-width:640px){.chap-head{grid-template-columns:1fr;gap:14px}}
+  .chap-index{
+    font-family:var(--serif);font-size:clamp(3rem,9vw,5.2rem);line-height:.8;
+    color:var(--accent);opacity:.9;font-style:italic;
+  }
+  .place-kicker{color:var(--accent-ink);letter-spacing:.24em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .nights{background:var(--accent);color:#fff;border-radius:999px;padding:3px 11px;font-size:.68rem;letter-spacing:.08em;font-weight:700}
+  .chap-head h2{margin-top:8px;color:var(--ink)}
+  .chap-lead{font-size:1.08rem;color:var(--ink-soft);max-width:56ch;margin-top:12px}
+
+  /* transit strip */
+  .transit{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;
+    background:rgba(255,255,255,.5);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:10px;padding:12px 16px;margin-bottom:30px;font-size:.9rem;
+  }
+  .transit .tlabel{font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.68rem;color:var(--accent-ink)}
+  .transit .leg{display:inline-flex;align-items:center;gap:8px}
+  .transit .dot{color:var(--accent);font-weight:800}
+  .transit .mono{background:rgba(42,32,25,.06);padding:2px 8px;border-radius:6px;font-size:.82rem}
+
+  /* your base / accommodation block */
+  .stay{
+    display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;
+    background:linear-gradient(135deg,rgba(255,255,255,.72),rgba(255,248,236,.5));
+    border:1px solid var(--line);border-top:4px solid var(--accent);
+    border-radius:var(--r);padding:22px 24px;margin-bottom:30px;
+    box-shadow:0 12px 30px -24px rgba(42,32,25,.5);
+  }
+  @media (max-width:600px){.stay{grid-template-columns:1fr;gap:14px}}
+  .stay .key{text-align:center;padding-right:20px;border-right:1px solid var(--line)}
+  @media (max-width:600px){.stay .key{border-right:none;border-bottom:1px solid var(--line);padding:0 0 14px;text-align:left}}
+  .stay .key .ic{font-size:1.7rem;line-height:1}
+  .stay .key .lab{font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:.6rem;color:var(--accent-ink);font-weight:700;margin-top:6px}
+  .stay .key .dates{font-family:var(--serif);font-size:.94rem;margin-top:8px;color:var(--ink);font-weight:600;line-height:1.3}
+  .stay .key .dates small{display:block;font-family:var(--sans);font-weight:400;font-size:.72rem;color:var(--ink-soft);letter-spacing:0}
+  .stay h3{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px;color:var(--ink)}
+  .stay .where{font-size:.85rem;color:var(--accent-ink);font-weight:600;margin-bottom:8px}
+  .stay p{margin:0 0 12px;font-size:.94rem;color:var(--ink-soft)}
+  .stay .amen{display:flex;flex-wrap:wrap;gap:7px}
+  .stay .amen span{background:rgba(42,32,25,.06);border-radius:999px;padding:4px 11px;font-size:.78rem;color:var(--ink)}
+
+  /* card grids */
+  .col-title{display:flex;align-items:baseline;gap:12px;margin:36px 0 16px}
+  .col-title .num{font-family:var(--mono);font-size:.8rem;color:var(--accent);font-weight:600}
+  .col-title h3{font-size:1.32rem;font-family:var(--serif)}
+  .col-title .rule{flex:1;height:1px;background:var(--line)}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px}
+  .card{
+    background:#fff8ec;border:1px solid var(--line);border-radius:var(--r);
+    padding:18px 18px 16px;position:relative;transition:transform .22s ease,box-shadow .22s ease,border-color .22s;
+    display:flex;flex-direction:column;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 30px -18px rgba(42,32,25,.5);border-color:var(--accent)}
+  .card .tag{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent-ink);font-weight:600}
+  .card h4{font-family:var(--serif);font-size:1.16rem;margin:7px 0 4px;padding-right:34px;line-height:1.15}
+  .card p{margin:0;font-size:.92rem;color:var(--ink-soft)}
+  .card .meta{margin-top:auto;padding-top:12px;font-size:.76rem;color:var(--ink-soft);display:flex;gap:12px;flex-wrap:wrap}
+  .card .meta span{display:inline-flex;align-items:center;gap:5px}
+  .card .meta b{color:var(--ink);font-weight:600}
+  .star-toggle{
+    position:absolute;top:13px;right:12px;width:30px;height:30px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;cursor:pointer;font-size:.95rem;line-height:1;
+    color:#c9b7a0;display:grid;place-items:center;transition:transform .15s,color .2s,background .2s;
+  }
+  .star-toggle:hover{transform:scale(1.12)}
+  .star-toggle.on{color:#fff;background:var(--accent);border-color:var(--accent)}
+
+  /* highlight callout */
+  .callout{
+    margin-top:30px;background:var(--accent);color:#fff;border-radius:var(--r);
+    padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;
+    box-shadow:0 18px 40px -24px var(--accent);
+  }
+  .callout .big{font-family:var(--serif);font-style:italic;font-size:2.4rem;line-height:1;opacity:.9}
+  .callout h4{margin:0 0 4px;font-family:var(--serif);font-size:1.25rem}
+  .callout p{margin:0;opacity:.94;font-size:.95rem;max-width:62ch}
+  .callout a{color:#fff;font-weight:700}
+
+  /* ============ ITINERARY TIMELINE ============ */
+  .timeline{display:flex;flex-direction:column;gap:0;margin-top:8px}
+  .tl-row{
+    display:grid;grid-template-columns:132px 26px 1fr;gap:0;align-items:stretch;
+  }
+  @media (max-width:560px){.tl-row{grid-template-columns:96px 22px 1fr}}
+  .tl-date{padding:16px 14px 16px 0;text-align:right}
+  .tl-date .d{font-family:var(--serif);font-size:1.1rem;font-weight:600}
+  .tl-date .w{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft)}
+  .tl-spine{position:relative}
+  .tl-spine::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--line);transform:translateX(-50%)}
+  .tl-dot{position:absolute;left:50%;top:22px;width:14px;height:14px;border-radius:50%;background:var(--dotc,var(--cotto));border:3px solid var(--paper);transform:translate(-50%,-50%);box-shadow:0 0 0 1px var(--line)}
+  .tl-body{padding:16px 0 20px 18px}
+  .tl-body .place{font-family:var(--serif);font-size:1.18rem;font-weight:600}
+  .tl-body .note{font-size:.9rem;color:var(--ink-soft);margin-top:2px}
+  .tl-body .chip{display:inline-block;margin-top:8px;font-size:.72rem;font-family:var(--mono);background:rgba(42,32,25,.06);padding:3px 9px;border-radius:6px;color:var(--ink-soft)}
+
+  /* ============ KNOW-HOW ============ */
+  .know-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:8px}
+  .know{background:#fff8ec;border:1px solid var(--line);border-radius:var(--r);padding:20px}
+  .know h4{font-family:var(--serif);font-size:1.16rem;margin:0 0 10px;display:flex;align-items:center;gap:9px}
+  .know h4 .ic{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.85rem}
+  .know ul{margin:0;padding-left:18px}
+  .know li{font-size:.9rem;color:var(--ink-soft);margin-bottom:7px}
+  .know li b{color:var(--ink)}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--chianti-deep);color:#E9D6B8;padding:48px 0;text-align:center}
+  footer .serif{font-size:1.6rem;color:#F6E4C2;font-style:italic}
+  footer p{margin:8px 0 0;font-size:.9rem;color:#C6AC82}
+
+  /* ============ SAVED MODAL ============ */
+  .modal-back{
+    position:fixed;inset:0;background:rgba(42,22,26,.55);backdrop-filter:blur(3px);
+    z-index:100;display:none;align-items:flex-start;justify-content:center;padding:8vh 20px;
+  }
+  .modal-back.open{display:flex}
+  .modal{
+    background:var(--paper);border-radius:18px;max-width:520px;width:100%;
+    padding:26px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);border:1px solid var(--line);
+    max-height:80vh;overflow:auto;
+  }
+  .modal h3{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px}
+  .modal .sub{font-size:.88rem;color:var(--ink-soft);margin-bottom:16px}
+  .modal .close{position:absolute}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+  .xbtn{border:1px solid var(--line);background:#fff;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:1.1rem;line-height:1;flex-shrink:0}
+  .saved-item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .saved-item:last-child{border-bottom:none}
+  .saved-item .badge{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:#fff;padding:3px 8px;border-radius:6px;flex-shrink:0;margin-top:2px}
+  .saved-item .n{font-family:var(--serif);font-weight:600}
+  .saved-item .rm{margin-left:auto;background:none;border:none;color:var(--ink-soft);cursor:pointer;font-size:1.1rem;line-height:1}
+  .empty{text-align:center;color:var(--ink-soft);padding:26px 0;font-size:.94rem}
+</style>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="kicker hero-eyebrow">A trip guide for Andy &amp; Kiki · Summer 2026</div>
+        <h1>London to the <em>Tyrrhenian</em></h1>
+        <p class="hero-sub"><b>Ten days</b> across Florence, the Chianti hills, the Argentario coast, the isle of Elba and Rome — the drive-and-swim way south, ending with a night flight home to New York.</p>
+
+        <div class="count" id="countdown" aria-label="Countdown to departure">
+          <div class="cell"><div class="num" id="cd-d">–</div><div class="lab">Days</div></div>
+          <div class="cell"><div class="num" id="cd-h">–</div><div class="lab">Hrs</div></div>
+          <div class="cell"><div class="num" id="cd-m">–</div><div class="lab">Min</div></div>
+        </div>
+
+        <div class="facts">
+          <div class="fact"><b>6</b> stops</div>
+          <div class="fact"><b>Wed Jul 22</b> JFK → LHR</div>
+          <div class="fact"><b>Sat Aug 8</b> FCO → JFK</div>
+          <div class="fact"><b>✈ · 🚗 · ⛴</b> plane, car &amp; ferry</div>
+        </div>
+
+        <div class="scrollcue">Scroll for the route</div>
+      </div>
+
+      <div class="map-card" aria-hidden="true">
+        <svg viewBox="0 0 420 360" role="img" aria-label="Playful route map: London south to Florence, Chianti, Porto Ercole, a ferry hop to Elba, then Rome">
+          <!-- sun -->
+          <g class="sunrays">
+            <line x1="376" y1="18" x2="376" y2="28"/><line x1="376" y1="56" x2="376" y2="66"/>
+            <line x1="352" y1="42" x2="362" y2="42"/><line x1="390" y1="42" x2="400" y2="42"/>
+            <line x1="359" y1="25" x2="366" y2="32"/><line x1="386" y1="52" x2="393" y2="59"/>
+            <line x1="393" y1="25" x2="386" y2="32"/><line x1="366" y1="52" x2="359" y2="59"/>
+          </g>
+          <circle class="sunball" cx="376" cy="42" r="11"/>
+
+          <!-- schematic land masses -->
+          <path class="land" d="M40,44 q30,-18 60,-4 q18,10 8,30 q-14,20 -44,14 q-30,-6 -34,-22 q-2,-12 10,-18 Z"/>
+          <path class="land" d="M250,120 q40,-16 70,10 q26,26 20,74 q-8,64 -40,110 q-22,30 -46,20 q-18,-8 -14,-40 q6,-52 -6,-96 q-8,-30 6,-56 q6,-24 4,-36 Z"/>
+
+          <!-- sea: waves + label + fish -->
+          <path class="wave" d="M70,220 q7,-6 14,0 q7,6 14,0"/>
+          <path class="wave w2" d="M96,262 q7,-6 14,0 q7,6 14,0"/>
+          <path class="wave w3" d="M60,298 q7,-6 14,0 q7,6 14,0"/>
+          <text class="sea-label" x="106" y="196">Mar Tirreno</text>
+          <text class="map-emoji bob3" x="140" y="300">🐠</text>
+
+          <!-- Elba -->
+          <ellipse class="isle" cx="172" cy="238" rx="17" ry="9"/>
+
+          <!-- main route -->
+          <path class="route route-draw" d="M78,58 C120,110 150,120 262,150 C300,162 300,196 250,214 C244,232 246,244 244,258"/>
+          <!-- ferry hop: Porto Ercole → Elba -->
+          <path class="hop" d="M238,254 C218,252 198,248 184,242"/>
+          <!-- Elba → Rome: ferry back + drive south -->
+          <path class="route" d="M174,247 C196,290 246,306 290,301"/>
+
+          <!-- travel doodles along the way -->
+          <text class="map-emoji bob" x="132" y="92" aria-hidden="true">✈️</text>
+          <text class="map-emoji bob2" x="272" y="222" aria-hidden="true">🚗</text>
+          <text class="map-emoji bob" x="200" y="266" aria-hidden="true">⛴️</text>
+          <text class="map-emoji bob3" x="222" y="192" aria-hidden="true">🍷</text>
+          <text class="map-emoji bob2" x="310" y="288" aria-hidden="true">🏛️</text>
+
+          <!-- nodes -->
+          <g class="node big"><circle cx="78" cy="58" r="7"/><text x="90" y="52">London</text><text class="sm" x="90" y="66">Thu · fly out</text></g>
+          <g class="node big"><circle cx="266" cy="150" r="8"/><text x="278" y="146">Florence</text><text class="sm" x="278" y="160">Thu + Sun</text></g>
+          <g class="node"><circle cx="250" cy="196" r="6"/><text x="262" y="200">Chianti</text><text class="sm" x="262" y="214">Fri–Sun</text></g>
+          <g class="node big"><circle cx="244" cy="258" r="7"/><text x="252" y="248">P. Ercole</text><text class="sm" x="252" y="262">Mon–Wed</text></g>
+          <g class="node big"><circle cx="172" cy="238" r="7"/><text x="120" y="230">Elba</text><text class="sm" x="104" y="243">⛴ Wed–Fri</text></g>
+          <g class="node big"><circle cx="296" cy="300" r="8"/><text x="290" y="322" text-anchor="end">Rome</text><text class="sm" x="290" y="336" text-anchor="end">Fri → JFK Sat</text></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== NAV ===================== -->
+<nav class="bar">
+  <div class="row">
+    <span class="brand">A &amp; K · Italia</span>
+    <div class="navscroll" id="navscroll">
+      <a class="link" href="#itinerary">Itinerary</a>
+      <a class="link" href="#florence">Florence</a>
+      <a class="link" href="#chianti">Chianti</a>
+      <a class="link" href="#argentario">Argentario</a>
+      <a class="link" href="#elba">Elba</a>
+      <a class="link" href="#rome">Rome</a>
+      <a class="link" href="#knowhow">Know-how</a>
+    </div>
+    <button class="savebtn" id="openSaved"><span class="star">★</span> Saved <span id="saveCount" class="mono">0</span></button>
+  </div>
+</nav>
+
+<!-- ===================== ITINERARY ===================== -->
+<section class="chapter" id="itinerary" style="--accent:var(--chianti);--accent-ink:var(--chianti)">
+  <div class="wrap">
+    <div class="place-kicker kicker">The arc of the trip</div>
+    <h2 style="margin-top:10px">Nine nights across six stops — Florence at both ends</h2>
+    <p class="chap-lead">City, then hills, back to the city, then island, then the eternal city. Here's the whole shape at a glance — everything after this is the good stuff for each stop.</p>
+
+    <div class="timeline">
+      <div class="tl-row"><div class="tl-date"><div class="d">Jul 22</div><div class="w">Wed</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--slate)"></span></div><div class="tl-body"><div class="place">JFK → London</div><div class="note">Wheels up a week early — London first, then the boot.</div><span class="chip">✈ DL 3 · JFK 10:00 PM → LHR 10:20 AM</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Jul 30</div><div class="w">Thu</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--cotto)"></span></div><div class="tl-body"><div class="place">London → Florence</div><div class="note">Morning hop from London City — you land at 11:45 AM with the whole first afternoon and evening in Florence.</div><span class="chip">✈ BA 8471 · LCY → FLR lands 11:45 AM</span> <span class="chip">🍝 Dalla Lola · booked 7:30 PM · ref BRYAG7JQ</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Jul 31</div><div class="w">Fri</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--olive)"></span></div><div class="tl-body"><div class="place">Florence → Chianti</div><div class="note">Europcar pick-up at 2 PM on Borgo Ognissanti, then escape into the vineyards. Two slow nights at Vignamaggio.</div><span class="chip">🚗 pick-up 2:00 PM · ~1 hr · 2 nights</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Aug 2</div><div class="w">Sun</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--cotto)"></span></div><div class="tl-body"><div class="place">Chianti → Florence</div><div class="note">Back to the city for the afternoon and one more night — time for the museums you skipped on the way in.</div><span class="chip">🚗 ~1 hr · 2nd Florence night</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Aug 3</div><div class="w">Mon</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--sea)"></span></div><div class="tl-body"><div class="place">Florence → Porto Ercole</div><div class="note">Straight down the coast to Monte Argentario — no ferry, just the drive. Two nights on the promontory.</div><span class="chip">🚗 ~2 hr 40 · 2 nights</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Aug 5</div><div class="w">Wed</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:#3C7EA6"></span></div><div class="tl-body"><div class="place">Porto Ercole → Elba</div><div class="note">Up the coast to Piombino, car onto the ferry, across to the island — home is Magazzini on the Gulf of Portoferraio.</div><span class="chip">🚗 ~1.5 hr · ⛴ ~1 hr · 2 nights</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Aug 7</div><div class="w">Fri</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--gold)"></span></div><div class="tl-body"><div class="place">Elba → Rome</div><div class="note">Morning ferry back to Piombino, then south to Rome for a final Italian night.</div><span class="chip">⛴ ~1 hr + 🚗 ~3 hr · 1 night</span></div></div>
+
+      <div class="tl-row"><div class="tl-date"><div class="d">Aug 8</div><div class="w">Sat</div></div><div class="tl-spine"><span class="tl-dot" style="--dotc:var(--chianti)"></span></div><div class="tl-body"><div class="place">Rome → JFK</div><div class="note">One big Roman day — ancient core in the morning, then out to Fiumicino by ~5 PM for the evening flight home.</div><span class="chip">✈ N0 401 · FCO 7:05 PM → JFK 10:30 PM</span></div></div>
+    </div>
+
+    <div class="col-title" style="margin-top:44px"><span class="num">✈</span><h3>Flights &amp; wheels</h3><span class="rule"></span></div>
+    <div class="know-grid">
+      <div class="know"><h4><span class="ic">✈</span>JFK → London</h4><ul>
+        <li><b>Delta DL 3</b> · Wed Jul 22</li>
+        <li>JFK <b>10:00 PM</b> → LHR <b>10:20 AM</b> (Jul 23)</li>
+        <li>A London week before the boot</li>
+      </ul></div>
+      <div class="know"><h4><span class="ic">✈</span>London → Florence</h4><ul>
+        <li><b>BA Cityflyer 8471</b> · Thu Jul 30</li>
+        <li>LCY <b>8:35 AM</b> → FLR <b>11:45 AM</b></li>
+        <li><b>London City airport</b> — not Heathrow!</li>
+      </ul></div>
+      <div class="know"><h4><span class="ic">✈</span>Rome → JFK</h4><ul>
+        <li><b>Norse Atlantic N0 401</b> (787-9) · Sat Aug 8</li>
+        <li>FCO <b>7:05 PM</b> → JFK <b>10:30 PM</b> EDT</li>
+        <li>Drop the car at FCO ~<b>5:00 PM</b>, then check in</li>
+      </ul></div>
+      <div class="know"><h4><span class="ic">🚗</span>The car</h4><ul>
+        <li><b>Europcar</b> · Peugeot 208 automatic (or similar), unlimited km</li>
+        <li><b>Pick up:</b> Fri Jul 31, 2:00 PM — Borgo Ognissanti 153r, Florence</li>
+        <li><b>Drop off:</b> Sat Aug 8, Fiumicino airport (FCO) — booked 2 PM, returning ~5 PM</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLORENCE ===================== -->
+<section class="chapter alt" id="florence" style="--accent:var(--cotto);--accent-ink:#8a3c22">
+  <div class="wrap">
+    <div class="chap-head">
+      <div class="chap-index">01</div>
+      <div>
+        <div class="place-kicker kicker">Florence <span class="nights">Thu + Sun · 2 nights</span></div>
+        <h2>The cradle of the Renaissance — in two unhurried bites</h2>
+        <p class="chap-lead">Florence bookends your Chianti detour: BA lands at 11:45 AM Thursday, so the whole first afternoon and evening are Florence's — then you're back again Sunday afternoon through Monday morning. That split is a gift: sunset and a great dinner on the first pass, a proper museum on the return.</p>
+      </div>
+    </div>
+
+    <div class="transit">
+      <span class="tlabel">Two windows</span>
+      <span class="leg"><b>Thu</b> ✈ BA 8471 lands <b>11:45 AM</b> — full afternoon + evening · <b>Dalla Lola 7:30 PM</b></span>
+      <span class="leg dot">·</span>
+      <span class="leg"><b>Sun→Mon</b> back from Chianti — afternoon, night + AM</span>
+      <span class="leg mono">ZTL: don't drive into the centro — cameras fine you</span>
+    </div>
+
+    <div class="col-title"><span class="num">A.</span><h3>See &amp; do</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Florence" data-color="var(--cotto)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Sunset · free</span><h4>Piazzale Michelangelo</h4><p>The postcard view of the whole city and the Duomo. Arrive ~45 min before sunset, bring a bottle of wine, claim the steps.</p><div class="meta"><span>🕔 <b>golden hour</b></span><span>🚶 15-min uphill walk</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Icon</span><h4>Duomo &amp; Baptistery</h4><p>Brunelleschi's dome up close. Even just circling it at dusk — the marble goes pink — beats fighting the daytime crowds.</p><div class="meta"><span>⛪ <b>exterior anytime</b></span><span>🎟 climb: pre-book</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Stroll</span><h4>Ponte Vecchio after dark</h4><p>The jewellers' bridge with the lights on the water. Cross into the Oltrarno for the quieter, more local side of town.</p><div class="meta"><span>🌉 <b>evening</b></span><span>📷 best light ~9pm</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Sunday · pre-book</span><h4>Uffizi or Accademia</h4><p>Your Sunday return is the moment for one great museum — the Uffizi's Botticellis or the Accademia's <em>David</em>. Book a timed slot. Heads-up: both are <b>closed Mondays</b>, so it has to be Sunday, not your ferry morning.</p><div class="meta"><span>🖼 <b>Sun only</b></span><span>🎟 timed ticket</span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">B.</span><h3>Eat &amp; drink</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Florence" data-color="var(--cotto)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Aperitivo</span><h4>Piazza Santo Spirito</h4><p>The Oltrarno's living room. Grab a spritz at a café table and watch the neighbourhood turn out before dinner.</p><div class="meta"><span>🍹 <b>7pm onward</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Your pick · dinner</span><h4>Osteria del Cinghiale Bianco</h4><p>The "White Boar" — a beloved old-school Oltrarno trattoria on Borgo San Jacopo, all beams and candlelight. Come for the namesake wild boar and a proper bistecca alla fiorentina. Book ahead.</p><div class="meta"><span>🐗 <b>reserve</b></span><span>€€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Booked · Thu Jul 30</span><h4>Dalla Lola</h4><p>An intimate, warm little Oltrarno osteria — the kind of neighbourhood spot for handmade pasta and Tuscan classics without the tourist churn. <b>Your table for 2 is confirmed for Thursday 30 July at 7:30 PM</b> — booking ref <b>BRYAG7JQ</b>.</p><div class="meta"><span>🍝 <b>7:30 PM · 2 people</b></span><span>ref BRYAG7JQ</span><span>€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Dinner</span><h4>Il Santo Bevitore</h4><p>Refined Tuscan cooking in the Oltrarno — the sweet-spot dinner for one great Florence night. Book ahead.</p><div class="meta"><span>🍷 <b>reserve</b></span><span>€€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Cheap &amp; legendary</span><h4>All'Antico Vinaio</h4><p>The schiacciata sandwich everyone queues for — deservedly. Perfect fuel if you land hungry and want to skip a sit-down.</p><div class="meta"><span>🥪 <b>lunch/late</b></span><span>€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Gelato</span><h4>Gelateria della Passera</h4><p>Tiny, all-natural, in a storybook little piazza. The nightcap of any Florence evening walk.</p><div class="meta"><span>🍨 <b>after dinner</b></span></div></article>
+    </div>
+
+    <div class="callout">
+      <div class="big">“</div>
+      <div><h4>How to split the two visits</h4><p><b>Thursday (from noon):</b> land 11:45 AM → check in, long lunch → Piazzale Michelangelo for sunset → <b>7:30 PM dinner at Dalla Lola (booked · ref BRYAG7JQ)</b> → gelato + Ponte Vecchio walk home. <b>Sunday:</b> back from Chianti for a booked museum → aperitivo in Santo Spirito → one last long Florentine dinner. Monday morning, coffee and out.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHIANTI ===================== -->
+<section class="chapter" id="chianti" style="--accent:var(--olive);--accent-ink:#4f5730">
+  <div class="wrap">
+    <div class="chap-head">
+      <div class="chap-index">02</div>
+      <div>
+        <div class="place-kicker kicker">The Chianti Hills <span class="nights">Fri Jul 31 – Sun Aug 2 · 2 nights</span></div>
+        <h2>Your own 600-year-old wine estate in the heart of Chianti</h2>
+        <p class="chap-lead">You're not just visiting Chianti — you're living on a working Chianti Classico estate for two nights. Which means the plan flips: the wine, the pool and the sunset are already home. Use the days for a couple of great meals and one lazy drive, and let Vignamaggio do the rest.</p>
+      </div>
+    </div>
+
+    <div class="stay">
+      <div class="key">
+        <div class="ic">🍇</div>
+        <div class="lab">Your base</div>
+        <div class="dates">Fri 31 Jul<small>→ Sun 2 Aug · 2 nights</small></div>
+      </div>
+      <div>
+        <h3>Villa Vignamaggio</h3>
+        <div class="where">Greve in Chianti · ~33 km / 1 hr south of Florence</div>
+        <p>A wine estate producing Chianti Classico since <b>1404</b>, set on 400 hectares between Greve and Panzano — and, by legend, the birthplace of Lisa Gherardini, the woman behind the <em>Mona Lisa</em>. (Branagh filmed <em>Much Ado About Nothing</em> in these gardens.) On-site tastings at <b>La Fattoria</b>, guest-only pools, and formal Renaissance gardens to wander at golden hour.</p>
+        <div class="amen"><span>🍷 On-site tastings</span><span>🏊 Guest pools</span><span>🎾 Tennis</span><span>🐴 Horse riding</span><span>🚲 Bikes</span><span>🌿 Renaissance gardens</span></div>
+      </div>
+    </div>
+
+    <div class="transit">
+      <span class="tlabel">Getting there · Fri</span>
+      <span class="leg">🚗 Europcar pick-up <b>2:00 PM</b> · Borgo Ognissanti 153r</span>
+      <span class="leg"><span class="dot">→</span> Vignamaggio, Greve</span>
+      <span class="leg mono">~1 hr on the SR222</span>
+      <span class="leg">Take the scenic Chiantigiana, not the highway</span>
+    </div>
+
+    <div class="col-title"><span class="num">A.</span><h3>See &amp; do</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Chianti" data-color="var(--olive)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">At home · book on arrival</span><h4>Tasting at La Fattoria</h4><p>Your estate's own tasting room among the vines. Do the Chianti Classico flight with estate olive oil and salumi — the easiest, best wine experience of the trip, no driving required.</p><div class="meta"><span>🍷 <b>on-site</b></span><span>📞 ask the front desk</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">The drive itself</span><h4>SR222 Chiantigiana</h4><p>The great Chianti wine road, Florence to Siena. Roll the windows down, stop at every viewpoint that tempts you. This is the point of having a car.</p><div class="meta"><span>🚗 <b>go slow</b></span><span>📷 endless</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Wine · book ahead</span><h4>Castello di Volpaia</h4><p>A wine estate that's also a tiny medieval village near Radda. Tastings among the towers, then a glass at La Bottega with a view.</p><div class="meta"><span>🍷 <b>reserve tasting</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Architecture + wine</span><h4>Antinori nel Chianti Classico</h4><p>The Antinori family's spectacular modern winery buried into the hillside. Cellar tour + tasting; feels like a Bond villain's cantina in the best way.</p><div class="meta"><span>🏛 <b>tour + taste</b></span><span>🎟 pre-book</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Hill towns</span><h4>Greve &amp; Montefioralle</h4><p>Greve's triangular market square (Saturday market!) plus a walk up to the fortified hamlet of Montefioralle above it. Classic slow morning.</p><div class="meta"><span>🏘 <b>Sat market</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Bigger day trip</span><h4>Siena or San Gimignano</h4><p>If you want one "sights" day: Siena's shell-shaped Campo, or San Gimignano's medieval towers with a glass of Vernaccia. Either is ~45–60 min away.</p><div class="meta"><span>🗺 <b>optional</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Do nothing</span><h4>Vignamaggio's pool + gardens</h4><p>Genuinely a plan. A morning by the estate pool, a wander through the Renaissance gardens, aperitivo on the terrace as the cicadas start — half the reason you came.</p><div class="meta"><span>🌅 <b>reserve zero things</b></span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">B.</span><h3>Eat &amp; drink</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Chianti" data-color="var(--olive)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Pilgrimage · book NOW</span><h4>Dario Cecchini, Panzano</h4><p>Tuscany's most famous butcher. Sit down at Officina della Bistecca for a set feast of bistecca alla fiorentina. This alone justifies the Chianti stop — reserve well ahead.</p><div class="meta"><span>🥩 <b>set menu</b></span><span>📞 reserve early</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Lunch with a view</span><h4>Ristoro di Lamole</h4><p>Terraced tables looking straight out over the vineyards near Greve. Handmade pasta, local wine, the whole Tuscan dream in one lunch.</p><div class="meta"><span>🍝 <b>lunch</b></span><span>€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Village dinner</span><h4>La Bottega di Volpaia</h4><p>Tiny trattoria in the Volpaia hamlet — ribollita, pici, and Chianti Classico by the carafe. Sunset table if you can get one.</p><div class="meta"><span>🍷 <b>dinner</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Taste at the source</span><h4>Olive oil + pecorino</h4><p>Every farm shop sells new-press oil and aged pecorino. Buy some to snack on for the drive south — road-trip picnic sorted.</p><div class="meta"><span>🧀 <b>to go</b></span></div></article>
+    </div>
+
+    <div class="callout">
+      <div class="big">🥩</div>
+      <div><h4>Reserve the one thing that sells out</h4><p>Your wine tasting is already sorted at Vignamaggio — so the only must-book is <b>Dario Cecchini</b> in Panzano (10 min away), which fills up fast in August. Do that now and the rest of the two days can be gloriously unplanned.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PORTO ERCOLE ===================== -->
+<section class="chapter alt" id="argentario" style="--accent:var(--sea);--accent-ink:#155e6b">
+  <div class="wrap">
+    <div class="chap-head">
+      <div class="chap-index">03</div>
+      <div>
+        <div class="place-kicker kicker">Porto Ercole · Monte Argentario <span class="nights">Mon Aug 3 – Wed Aug 5 · 2 nights</span></div>
+        <h2>Tuscany's most stylish stretch of coast — forts, coves and a yacht-filled bay</h2>
+        <p class="chap-lead">Two nights on the Monte Argentario promontory: a near-island of Spanish star-forts, hidden turquoise coves, a glossy marina, and the wild Maremma coast at your back. This is where Rome's smart set summers — and where Caravaggio washed ashore for his final act in 1610. With one full day here, pick your battles and swim well.</p>
+      </div>
+    </div>
+
+    <div class="transit">
+      <span class="tlabel">The drive · Mon</span>
+      <span class="leg">Florence <span class="dot">→</span> <b>Porto Ercole</b></span>
+      <span class="leg mono">~2 hr 40 · 190 km, all road</span>
+      <span class="leg">No ferry this leg — the car just rolls south down the coast</span>
+    </div>
+
+    <div class="col-title"><span class="num">A.</span><h3>Sea &amp; coves</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Porto Ercole" data-color="var(--sea)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Blue Flag sand</span><h4>Spiaggia della Feniglia</h4><p>A 6 km arc of golden sand backed by a centuries-old pine forest on the sandbar linking Argentario to the mainland. Real shade, calm water, Blue Flag every year — the easy, do-nothing beach day. A flat cycle path runs the whole reserve.</p><div class="meta"><span>🏖 <b>sand + shade</b></span><span>⏱ ~10 min from town</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Prettiest cove</span><h4>Cala del Gesso</h4><p>The Argentario's most beautiful cove — turquoise water over pale pebbles, reached by a short walk down from the road. Small, wild, and worth the scramble. Go early.</p><div class="meta"><span>🌊 <b>turquoise</b></span><span>🥾 short hike down</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Easy coves</span><h4>Cala Galera &amp; Le Viste</h4><p>Sheltered spots near the marina — quick to reach for a swim without a mission. Le Viste gives you the sunset-facing rocks on the town side.</p><div class="meta"><span>🏊 <b>easy access</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">On the water</span><h4>Rent a boat for the day</h4><p>No licence needed for the small ones. This is the whole point of Argentario — anchor in coves you can't reach by road, then push on toward Giglio or Giannutri. Book in Porto Ercole or Porto Santo Stefano.</p><div class="meta"><span>⛵ <b>reserve ahead</b></span><span>whole day</span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">B.</span><h3>Town, forts &amp; day trips</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Porto Ercole" data-color="var(--sea)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Sunset · icon</span><h4>Old town &amp; Forte Stella</h4><p>Climb through the walled old town to the 16th-century Spanish star fort crowning the hill — six-pointed bastions and the best sunset panorama over the entire promontory.</p><div class="meta"><span>🏰 <b>go for sunset</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">History</span><h4>Caravaggio's last stop</h4><p>The great painter died here on 18 July 1610, on the run from a murder charge in Rome. The Church of Sant'Erasmo in the old town anchors the enduring mystery of where he's buried — a strange, moving footnote to a swim-and-sun week.</p><div class="meta"><span>⛪ <b>old town</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Day trip · ferry</span><h4>Giglio Island</h4><p>Hop the ferry from Porto Santo Stefano to this jewel — a hilltop castello, glass-clear water, and a fraction of the crowds. A great full-day escape onto the water.</p><div class="meta"><span>⛴ <b>from P. Santo Stefano</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Sister town</span><h4>Porto Santo Stefano</h4><p>Argentario's livelier harbour on the north side — waterfront aperitivo, the island ferries, and a scenic drive over the ridge to reach it. Worth an evening.</p><div class="meta"><span>🍹 <b>sunset drinks</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Nature + food</span><h4>Orbetello lagoon</h4><p>The lagoon town sits on its own sandbar, ringed by a WWF reserve where flamingos wade at dusk. Lovely evening passeggiata and some of the region's best seafood.</p><div class="meta"><span>🦩 <b>go at dusk</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Optional inland day</span><h4>Saturnia hot springs</h4><p>If you want one non-beach day: the free thermal cascades at Saturnia — warm turquoise pools tumbling over travertine terraces. ~1 hr 15 inland; go early or late to beat the crowds.</p><div class="meta"><span>♨ <b>~75 min drive</b></span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">C.</span><h3>Eat &amp; drink</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Porto Ercole" data-color="var(--sea)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">The legend · splurge</span><h4>Il Pellicano</h4><p>The iconic cliffside hotel between town and the sea — a Riviera institution since the '60s. Even if you're not staying, a drink on the terrace or lunch at the beach club (or the Michelin-starred dinner, if you're going for it) is Argentario at its most glamorous.</p><div class="meta"><span>🥂 <b>reserve</b></span><span>€€€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Seafood</span><h4>Porto Ercole harbour tables</h4><p>The waterfront trattorias do the day's catch — spaghetti alle vongole, grilled fish, frittura mista — with the yachts bobbing right in front of you. Pick the busy one.</p><div class="meta"><span>🐟 <b>dinner</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Local specialty</span><h4>Orbetello bottarga</h4><p>Orbetello is famous for its bottarga (cured mullet roe) and lagoon eel. Find a lagoon-side spot for the real Maremma flavours — a short drive well worth making.</p><div class="meta"><span>🍝 <b>worth the trip</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Local pour</span><h4>Ansonica &amp; Morellino</h4><p>The coastal white Ansonica and the juicy red Morellino di Scansano are the wines of this corner of the Maremma. Order local, drink well.</p><div class="meta"><span>🍷 <b>with dinner</b></span></div></article>
+    </div>
+
+    <div class="callout">
+      <div class="big">⛵</div>
+      <div><h4>The two-night play</h4><p>With one full day: morning at <b>Feniglia</b> or the Cala del Gesso scramble, sunset from <b>Forte Stella</b>, and a drink on the terrace at <b>Il Pellicano</b> (skip Saturnia and Giglio this trip — Elba's next). In August this is jet-set country — book the restaurant and beach club ahead.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ELBA ===================== -->
+<section class="chapter" id="elba" style="--accent:#3C7EA6;--accent-ink:#2b5f80">
+  <div class="wrap">
+    <div class="chap-head">
+      <div class="chap-index">04</div>
+      <div>
+        <div class="place-kicker kicker">Isola d'Elba · Magazzini <span class="nights">Wed Aug 5 – Fri Aug 7 · 2 nights</span></div>
+        <h2>Napoleon's island, from a quiet hamlet on the gulf</h2>
+        <p class="chap-lead">Two nights on the island where the emperor spent his exile — based in Magazzini, an old fishing hamlet looking across the Gulf of Portoferraio at the town lights. You get one full island day and two golden evenings: swim it, sail it, and eat very well.</p>
+      </div>
+    </div>
+
+    <div class="stay">
+      <div class="key">
+        <div class="ic">⚓</div>
+        <div class="lab">Your base</div>
+        <div class="dates">Wed 5 Aug<small>→ Fri 7 Aug · 2 nights</small></div>
+      </div>
+      <div>
+        <h3>Magazzini</h3>
+        <div class="where">Gulf of Portoferraio · 10 min east of town</div>
+        <p>A tiny waterfront hamlet of old fishermen's houses and a small marina, with a pebble beach on the doorstep and the whole gulf as your evening view — Portoferraio's lights glitter across the water at night. Quiet, local, and perfectly placed: town is 10 minutes one way, the beaches of Bagnaia and Nisporto minutes the other.</p>
+        <div class="amen"><span>🌊 Beach on the doorstep</span><span>⚓ Small marina</span><span>🌅 Sunset across the gulf</span><span>🚗 10 min to Portoferraio</span></div>
+      </div>
+    </div>
+
+    <div class="transit">
+      <span class="tlabel">The crossing · Wed</span>
+      <span class="leg">Porto Ercole <span class="dot">→</span> <b>Piombino</b> port</span>
+      <span class="leg mono">drive ~1.5 hr</span>
+      <span class="leg"><span class="dot">→</span> ferry to <b>Portoferraio</b></span>
+      <span class="leg mono">~1 hr · Moby / Toremar / Blu Navy</span>
+      <span class="leg">🚗 book the car on + arrive <b>1 hr early</b></span>
+    </div>
+
+    <div class="col-title"><span class="num">A.</span><h3>Sea &amp; swims</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Elba" data-color="#3C7EA6">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">On your doorstep</span><h4>Bagnaia &amp; the Magazzini shore</h4><p>The local swim: Bagnaia's calm pebble-and-sand bay is minutes from your door, facing the gulf. Perfect for the arrival-evening dip and the lazy last morning.</p><div class="meta"><span>🏖 <b>5 min away</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Snorkel</span><h4>Sansone &amp; Capo Bianco</h4><p>Blinding white pebbles and impossibly clear water just north of Portoferraio — the island's best easy snorkelling, ~20 min from Magazzini. Bring the mask.</p><div class="meta"><span>🤿 <b>clearest water</b></span><span>⏱ ~20 min</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Worth the drive</span><h4>Fetovaia</h4><p>A golden crescent in a sheltered southwest bay, regularly named one of Italy's most beautiful beaches. It's ~50 min across the island — make it the centrepiece of your one full day if you're beach-hopping.</p><div class="meta"><span>🌅 <b>go early</b></span><span>⏱ ~50 min</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">On a boat</span><h4>Rent a boat from Portoferraio</h4><p>No licence needed for the small ones. Anchor in coves you can't reach by road, swim off the side, circle the gulf home to Magazzini. The strongest contender for your full day — reserve ahead.</p><div class="meta"><span>⛵ <b>reserve ahead</b></span><span>whole day</span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">B.</span><h3>Towns &amp; food</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Elba" data-color="#3C7EA6">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">History + harbour</span><h4>Portoferraio &amp; Napoleon's villa</h4><p>Pastel houses over a busy marina, Medici forts, and the Villa dei Mulini — the emperor's little residence from his 1814 exile, with gardens over the bay. A charming late afternoon, 10 minutes from home.</p><div class="meta"><span>🏛 <b>~2 hrs</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Best dinner town</span><h4>Capoliveri evening</h4><p>Hilltop old town of tangled lanes, boutiques and terrace trattorias doing the day's catch — the island's best long dinner and passeggiata, ~25 min south. Make it Thursday night's plan.</p><div class="meta"><span>🌆 <b>~25 min</b></span><span>🐟 dinner</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Lunch</span><h4>Portoferraio harbour tables</h4><p>Waterfront spots along the old marina — frittura mista and a cold white watching the ferries and yachts come and go.</p><div class="meta"><span>🦐 <b>lunch</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Local pours</span><h4>Aleatico &amp; schiaccia briaca</h4><p>Elba's prized sweet red (DOCG) and the island's nutty "drunken" cake — the after-dinner ritual on a Magazzini terrace with the gulf lights on.</p><div class="meta"><span>🍷 <b>after dinner</b></span></div></article>
+    </div>
+
+    <div class="callout">
+      <div class="big">⛵</div>
+      <div><h4>The two-night play</h4><p>Arrive Wed → doorstep swim + Portoferraio evening. Thursday is the big one: <b>boat day</b> (or Fetovaia + Sansone beach-hop), then a <b>Capoliveri dinner</b>. Book the <b>Friday-morning ferry back</b> now — Rome is still a 3-hour drive after you land.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ROME ===================== -->
+<section class="chapter alt" id="rome" style="--accent:var(--gold);--accent-ink:#8a6524">
+  <div class="wrap">
+    <div class="chap-head">
+      <div class="chap-index">05</div>
+      <div>
+        <div class="place-kicker kicker">Rome <span class="nights">Fri–Sat · 1 night</span></div>
+        <h2>One Roman night and one big day before the flight home</h2>
+        <p class="chap-lead">You arrive Friday evening off the ferry and fly out Saturday at 7:05 PM — so Rome is one great night and one full day until mid-afternoon. Treat it as a highlight reel: pick your loops, eat extremely well, and roll for Fiumicino around 3:30.</p>
+      </div>
+    </div>
+
+    <div class="transit">
+      <span class="tlabel">Getting there &amp; out</span>
+      <span class="leg">Elba ⛴ Piombino <span class="dot">→</span> Rome</span>
+      <span class="leg mono">⛴ ~1 hr + 🚗 ~3 hr</span>
+      <span class="leg"><span class="dot">→</span> Sat ✈ <b>N0 401 · FCO 7:05 PM</b></span>
+      <span class="leg mono">drop car at FCO ~5 PM — leave the centro by ~3:30 PM</span>
+    </div>
+
+    <div class="col-title"><span class="num">A.</span><h3>See &amp; do</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Rome" data-color="var(--gold)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Friday night</span><h4>Trastevere by night</h4><p>Arrive, drop bags, and go straight to Trastevere — cobbled lanes, ivy, and trattoria tables spilling into the piazzas. The perfect first Roman evening.</p><div class="meta"><span>🌙 <b>dinner + stroll</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Ancient loop · pre-book</span><h4>Colosseum &amp; Roman Forum</h4><p>Book the first-entry skip-the-line slot Saturday morning. Colosseum, then wander down through the Forum and up Palatine Hill. Beat the heat and the crowds.</p><div class="meta"><span>🏟 <b>early ticket</b></span><span>🎟 essential</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Baroque loop · free</span><h4>Pantheon → Trevi → Navona</h4><p>The walkable greatest-hits: the Pantheon's oculus, coins in the Trevi, and Piazza Navona's fountains. Magic after dark on Friday — or the perfect Saturday early-afternoon loop before the airport run.</p><div class="meta"><span>🚶 <b>~2–3 hrs</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Friday night bonus</span><h4>The Gianicolo terrace</h4><p>Above Trastevere, the Janiculum terrace gives you all of Rome's domes at once. Walk up after Friday dinner for the city lights — Saturday's too tight for it.</p><div class="meta"><span>🌃 <b>Fri after dinner</b></span></div></article>
+    </div>
+
+    <div class="col-title"><span class="num">B.</span><h3>Eat &amp; drink</h3><span class="rule"></span></div>
+    <div class="cards" data-place="Rome" data-color="var(--gold)">
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">The four pastas</span><h4>Cacio e pepe &amp; carbonara</h4><p>Rome's holy trinity plus one — cacio e pepe, carbonara, amatriciana, gricia. Order across the table and share. A Trastevere or Testaccio trattoria won't miss.</p><div class="meta"><span>🍝 <b>the whole point</b></span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Deli institution</span><h4>Roscioli</h4><p>Salumeria-slash-restaurant near Campo de' Fiori doing a famous carbonara and incredible cheese/charcuterie. Book ahead — it's tiny and beloved.</p><div class="meta"><span>🧀 <b>reserve</b></span><span>€€€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Street snack</span><h4>Supplì &amp; pizza al taglio</h4><p>Fried rice croquettes and pizza sold by weight — the ideal cheap lunch between sights. Grab, walk, eat.</p><div class="meta"><span>🍕 <b>on the go</b></span><span>€</span></div></article>
+      <article class="card"><button class="star-toggle" aria-label="Save">★</button><span class="tag">Farewell gelato</span><h4>Giolitti or Fatamorgana</h4><p>The last gelato of the trip. Giolitti is the grand old classic; Fatamorgana the inventive-flavours favourite. Either is a good goodbye.</p><div class="meta"><span>🍨 <b>one for the road</b></span></div></article>
+    </div>
+
+    <div class="callout">
+      <div class="big">🕒</div>
+      <div><h4>The Saturday clock</h4><p>Flight's at <b>7:05 PM</b> and you're dropping the car at FCO around <b>5</b>. Leave the centro by <b>~3:30 PM</b> — Saturday traffic and the rental return both eat time. That gives you the Colosseum first thing, a proper lunch, and the baroque loop before you go. One tip: your booking says a 2 PM return, so give Europcar a heads-up about the late drop to keep it painless.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== KNOW-HOW ===================== -->
+<section class="chapter" id="knowhow" style="--accent:var(--chianti);--accent-ink:var(--chianti)">
+  <div class="wrap">
+    <div class="place-kicker kicker">Good to know</div>
+    <h2 style="margin-top:10px">The practical stuff, in one place</h2>
+    <p class="chap-lead">Flights, beds and the car are already sorted — these are the small things that keep a drive-and-ferry trip smooth.</p>
+
+    <div class="know-grid">
+      <div class="know"><h4><span class="ic">🚗</span>Driving in Italy</h4><ul>
+        <li><b>ZTL zones:</b> Florence &amp; Rome city centres are camera-enforced no-drive areas. Park outside and walk, or you'll get fined by mail weeks later.</li>
+        <li><b>Autostrada tolls:</b> keep some cash/card handy for the toll booths on the A1.</li>
+        <li><b>IDP:</b> an International Driving Permit alongside your licence is technically required — worth having.</li>
+      </ul></div>
+
+      <div class="know"><h4><span class="ic">⛴</span>The Elba ferry</h4><ul>
+        <li><b>Book the car on early, both ways.</b> Piombino ⇄ Portoferraio, ~1 hr, run by Moby, Toremar &amp; Blu Navy — August crossings fill up.</li>
+        <li><b>Arrive ~1 hr before</b> departure when travelling with a vehicle.</li>
+        <li><b>Friday morning:</b> take an early boat — Rome is still ~3 hrs of driving after you land at Piombino.</li>
+      </ul></div>
+
+      <div class="know"><h4><span class="ic">🏖</span>Coast &amp; coves</h4><ul>
+        <li><b>Feniglia</b> is the easy sandy beach — but the car park fills early in August, so arrive in the morning.</li>
+        <li>The prettiest coves (like <b>Cala del Gesso</b>) need a short scramble or a boat — pack water shoes for the pebbles.</li>
+        <li><b>Book beach clubs and a boat rental ahead</b> — this is the yacht crowd's coast in high summer.</li>
+      </ul></div>
+
+      <div class="know"><h4><span class="ic">🧳</span>Pack for it</h4><ul>
+        <li>Swimwear ×2, reef-safe sunscreen, and your own <b>snorkel mask</b> — the Argentario and Elba coves reward it.</li>
+        <li><b>Water shoes:</b> many of the best beaches are pebble, not sand.</li>
+        <li>One smart-casual outfit each for a nice Porto Ercole or Roman dinner; otherwise light and breathable.</li>
+        <li>EU <b>Type F/L adapter</b> and a power bank for beach days.</li>
+      </ul></div>
+
+      <div class="know"><h4><span class="ic">📶</span>Money &amp; phone</h4><ul>
+        <li>Grab an <b>eSIM</b> before you fly — data works the moment you land.</li>
+        <li>Cards are widely accepted, but carry <b>cash</b> for small trattorias, markets and beach kiosks (some are cash-only).</li>
+        <li><b>Aperitivo</b> is ~6–8pm; kitchens open late (dinner from ~8pm). Adjust your clock south.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="serif">Buon viaggio, Andy &amp; Kiki</div>
+    <p>London → Florence → Chianti → Porto Ercole → Elba → Rome → JFK · 30 July – 8 August 2026</p>
+    <p style="margin-top:14px;font-size:.8rem;opacity:.7">Tap the ★ on any card to build your shortlist — it saves on this device.</p>
+  </div>
+</footer>
+
+<!-- ===================== SAVED MODAL ===================== -->
+<div class="modal-back" id="modalBack">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal-head">
+      <div><h3 id="mTitle">Your shortlist</h3><div class="sub">Saved on this device — your picks for the trip.</div></div>
+      <button class="xbtn" id="closeSaved" aria-label="Close">×</button>
+    </div>
+    <div id="savedList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Countdown ---------- */
+  var target = new Date('2026-07-22T22:00:00'); // DL 3 wheels-up, JFK
+  var elD=document.getElementById('cd-d'),elH=document.getElementById('cd-h'),elM=document.getElementById('cd-m');
+  function tick(){
+    var now=new Date(), diff=target-now;
+    if(diff<0){elD.textContent='0';elH.textContent='0';elM.textContent='0';return;}
+    var d=Math.floor(diff/86400000);
+    var h=Math.floor(diff%86400000/3600000);
+    var m=Math.floor(diff%3600000/60000);
+    elD.textContent=d; elH.textContent=h; elM.textContent=m;
+  }
+  tick(); if(!reduce) setInterval(tick,30000);
+
+  /* ---------- Saved / favourites ---------- */
+  var KEY='ak-italia-saved-v1';
+  var saved={};
+  try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ saved={}; }
+  var countEl=document.getElementById('saveCount');
+
+  function persist(){ try{ localStorage.setItem(KEY,JSON.stringify(saved)); }catch(e){} }
+  function updateCount(){ countEl.textContent=Object.keys(saved).length; }
+
+  // assign a stable id to every card and wire the star
+  var cards=document.querySelectorAll('.card');
+  cards.forEach(function(card,i){
+    var grid=card.closest('.cards');
+    var place=grid?grid.getAttribute('data-place'):'';
+    var color=grid?grid.getAttribute('data-color'):'var(--cotto)';
+    var name=(card.querySelector('h4')||{}).textContent||('Item '+i);
+    var id=place+'::'+name;
+    card.setAttribute('data-id',id);
+    card.setAttribute('data-place',place);
+    card.setAttribute('data-color',color);
+    var btn=card.querySelector('.star-toggle');
+    if(saved[id]){ btn.classList.add('on'); btn.setAttribute('aria-pressed','true'); }
+    else { btn.setAttribute('aria-pressed','false'); }
+    btn.addEventListener('click',function(){
+      if(saved[id]){ delete saved[id]; btn.classList.remove('on'); btn.setAttribute('aria-pressed','false'); }
+      else { saved[id]={name:name,place:place,color:color}; btn.classList.add('on'); btn.setAttribute('aria-pressed','true'); }
+      persist(); updateCount();
+    });
+  });
+  updateCount();
+
+  /* ---------- Saved modal ---------- */
+  var back=document.getElementById('modalBack');
+  var list=document.getElementById('savedList');
+  function renderList(){
+    var keys=Object.keys(saved);
+    if(!keys.length){ list.innerHTML='<div class="empty">Nothing saved yet.<br>Tap the ★ on any recommendation to add it here.</div>'; return; }
+    var html='';
+    keys.forEach(function(k){
+      var it=saved[k];
+      html+='<div class="saved-item" data-k="'+k.replace(/"/g,'&quot;')+'">'
+          +'<span class="badge" style="background:'+it.color+'">'+it.place+'</span>'
+          +'<span class="n">'+it.name+'</span>'
+          +'<button class="rm" aria-label="Remove" data-rm="'+k.replace(/"/g,'&quot;')+'">×</button>'
+          +'</div>';
+    });
+    list.innerHTML=html;
+  }
+  function openModal(){ renderList(); back.classList.add('open'); }
+  function closeModal(){ back.classList.remove('open'); }
+  document.getElementById('openSaved').addEventListener('click',openModal);
+  document.getElementById('closeSaved').addEventListener('click',closeModal);
+  back.addEventListener('click',function(e){ if(e.target===back) closeModal(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeModal(); });
+  list.addEventListener('click',function(e){
+    var k=e.target && e.target.getAttribute && e.target.getAttribute('data-rm');
+    if(!k) return;
+    delete saved[k]; persist(); updateCount(); renderList();
+    // untick the matching card star
+    var card=document.querySelector('.card[data-id="'+k.replace(/"/g,'\\"')+'"]');
+    if(card){ var b=card.querySelector('.star-toggle'); if(b){ b.classList.remove('on'); b.setAttribute('aria-pressed','false'); } }
+  });
+
+  /* ---------- Scrollspy nav ---------- */
+  var links=Array.prototype.slice.call(document.querySelectorAll('nav.bar a.link'));
+  var sections=links.map(function(l){ return document.querySelector(l.getAttribute('href')); });
+  if('IntersectionObserver' in window){
+    var spy=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var id='#'+en.target.id;
+          links.forEach(function(l){ l.classList.toggle('active', l.getAttribute('href')===id); });
+        }
+      });
+    },{rootMargin:'-45% 0px -50% 0px',threshold:0});
+    sections.forEach(function(s){ if(s) spy.observe(s); });
+  }
+})();
+</script>
+
