@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloyd European Christening — London &amp; Paris Itinerary</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #2b2620;
+    --muted: #8a8175;
+    --accent: #9c2b2e;
+    --accent-soft: #f3e3e3;
+    --gold: #b08d44;
+    --line: #e7e0d4;
+    --paris: #26456e;
+    --paris-soft: #e3eaf3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Georgia, 'Times New Roman', serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 20px 80px; }
+
+  header {
+    text-align: center;
+    padding: 64px 20px 40px;
+    border-bottom: 3px double var(--gold);
+    margin-bottom: 12px;
+  }
+  .eyebrow {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 40px; font-weight: normal; letter-spacing: 0.5px; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .dates {
+    margin-top: 12px;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 17px;
+  }
+  .travelers {
+    margin-top: 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .travelers span { color: var(--gold); margin: 0 6px; }
+
+  .key-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 36px 0 48px;
+  }
+  .key-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .key-card h3 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .key-card p { font-size: 15px; }
+  .key-card .sub { color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+
+  .day {
+    display: flex;
+    gap: 22px;
+    margin-bottom: 8px;
+  }
+  .day-marker {
+    flex: 0 0 86px;
+    text-align: right;
+    padding-top: 22px;
+  }
+  .day-marker .dow {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .day-marker .date {
+    font-size: 26px;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .day-marker .month {
+    font-style: italic;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .day.paris .day-marker .date { color: var(--paris); }
+
+  .day-line {
+    flex: 0 0 1px;
+    background: var(--line);
+    position: relative;
+  }
+  .day-line::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: -4.5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .day.paris .day-line::before { background: var(--paris); }
+
+  .day-body {
+    flex: 1;
+    padding: 18px 0 34px;
+  }
+  .day-title {
+    font-size: 21px;
+    margin-bottom: 4px;
+  }
+  .badge {
+    display: inline-block;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 100px;
+    padding: 3px 12px;
+    margin-bottom: 10px;
+  }
+  .day.paris .badge { background: var(--paris-soft); color: var(--paris); }
+
+  .item {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 10px;
+  }
+  .item .time {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: bold;
+  }
+  .item .what { font-size: 16.5px; margin-top: 2px; }
+  .item .detail { color: var(--muted); font-size: 14px; margin-top: 3px; }
+
+  .item.open {
+    background: transparent;
+    border-style: dashed;
+  }
+  .item.open .what { color: var(--muted); font-style: italic; }
+
+  .section-break {
+    text-align: center;
+    margin: 20px 0 30px;
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 8px;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 28px;
+    border-top: 3px double var(--gold);
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  @media (max-width: 560px) {
+    h1 { font-size: 30px; }
+    .key-info { grid-template-columns: 1fr; }
+    .day { gap: 14px; }
+    .day-marker { flex-basis: 64px; }
+    .day-marker .date { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">The Cloyd Family Presents</div>
+    <h1>A European <em>Christening</em></h1>
+    <div class="dates">London &amp; Paris &middot; July 22 – 31, 2026</div>
+    <div class="travelers">Patty <span>&#10022;</span> Gary <span>&#10022;</span> Ben <span>&#10022;</span> Sydney <span>&#10022;</span> Andy</div>
+  </header>
+
+  <div class="key-info">
+    <div class="key-card">
+      <h3>London Home Base</h3>
+      <p>Airbnb — South Kensington</p>
+      <p class="sub">14 Queen's Gate Place 4, London SW7 5NX<br>Check-in Thu 7/23 at 3:00 PM &middot; Check-out Thu 7/30 at 11:00 AM</p>
+    </div>
+    <div class="key-card">
+      <h3>Paris Hotel</h3>
+      <p>Hôtel Le Grand Mazarin</p>
+      <p class="sub">17 Rue de la Verrerie, 75004 Paris (Le Marais)<br>Sunday &amp; Monday nights (7/26 – 7/28)</p>
+    </div>
+    <div class="key-card">
+      <h3>Final Night</h3>
+      <p>Holmes Hotel — Marylebone</p>
+      <p class="sub">83 Chiltern Street, London W1U 6NF<br>Thursday 7/30, one night &middot; Concierge arranging Heathrow transfer</p>
+    </div>
+    <div class="key-card">
+      <h3>Flights</h3>
+      <p>BA 120 &middot; CVG → LHR &middot; Wed 7/22</p>
+      <p class="sub">BA 121 &middot; LHR → CVG &middot; Fri 7/31 at 3:35 PM</p>
+    </div>
+  </div>
+
+  <!-- Wednesday, July 22 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Wed</div>
+      <div class="date">22</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Departure</span>
+      <div class="day-title">Off to London</div>
+      <div class="item">
+        <div class="time">Evening</div>
+        <div class="what">✈️ British Airways 120 — Cincinnati (CVG) → London Heathrow</div>
+        <div class="detail">Overnight flight — get some rest!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thursday, July 23 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Thu</div>
+      <div class="date">23</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Arrival Day</span>
+      <div class="day-title">Welcome to London</div>
+      <div class="item">
+        <div class="time">Morning</div>
+        <div class="what">🛬 Land at Heathrow</div>
+        <div class="detail">Car service is booked — they'll take you straight to the Airbnb</div>
+      </div>
+      <div class="item">
+        <div class="time">3:00 PM</div>
+        <div class="what">🏠 Check in to the Airbnb</div>
+        <div class="detail">14 Queen's Gate Place 4, South Kensington, SW7 5NX</div>
+      </div>
+      <div class="item">
+        <div class="time">Evening</div>
+        <div class="what">🍽️ Dinner at Fiona's</div>
+        <div class="detail">Near Notting Hill</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Friday, July 24 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Fri</div>
+      <div class="date">24</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">London</span>
+      <div class="day-title">Exploring London</div>
+      <div class="item open">
+        <div class="time">Daytime</div>
+        <div class="what">Open — activities to come</div>
+      </div>
+      <div class="item">
+        <div class="time">7:30 PM</div>
+        <div class="what">🍽️ Dinner at Sessions Arts Club</div>
+        <div class="detail">Clerkenwell</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saturday, July 25 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Sat</div>
+      <div class="date">25</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">London</span>
+      <div class="day-title">The Grand Tour</div>
+      <div class="item">
+        <div class="time">10:00 AM</div>
+        <div class="what">🚶 Guided London Walking Tour — 30 Top Sights</div>
+        <div class="detail">Meet at the top of the steps of St Paul's Station (Exit 2), next to Caffe Nero (30 Newgate Street, EC2V 6AA). Look for the guide with a yellow umbrella</div>
+      </div>
+      <div class="item open">
+        <div class="time">Afternoon / Evening</div>
+        <div class="what">Open — activities to come</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-break">&#10022; &#10022; &#10022;</div>
+
+  <!-- Sunday, July 26 -->
+  <div class="day paris">
+    <div class="day-marker">
+      <div class="dow">Sun</div>
+      <div class="date">26</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">To Paris</span>
+      <div class="day-title">Bonjour, Paris</div>
+      <div class="item">
+        <div class="time">12:00 PM</div>
+        <div class="what">🍽️ Sunday lunch at The Barley Mow</div>
+        <div class="detail">82 Duke Street, Mayfair — table for 6, booked 12:00–2:30 PM. Plan to leave by ~2:00 to make the train</div>
+      </div>
+      <div class="item">
+        <div class="time">3:31 PM</div>
+        <div class="what">🚄 Eurostar — London St Pancras → Paris Gare du Nord</div>
+        <div class="detail">Arrive at St Pancras with time to spare — allow ~45–60 min for check-in and passport control</div>
+      </div>
+      <div class="item">
+        <div class="time">Evening</div>
+        <div class="what">🏨 Check in to Hôtel Le Grand Mazarin</div>
+        <div class="detail">Le Marais — home for two nights</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monday, July 27 -->
+  <div class="day paris">
+    <div class="day-marker">
+      <div class="dow">Mon</div>
+      <div class="date">27</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Paris</span>
+      <div class="day-title">A Full Day in Paris</div>
+      <div class="item">
+        <div class="time">12:00 PM</div>
+        <div class="what">🖼️ Visit the Louvre</div>
+        <div class="detail">Rue de Rivoli, 75001 — about a 15-minute walk from the hotel</div>
+      </div>
+      <div class="item">
+        <div class="time">4:30 PM</div>
+        <div class="what">⛪ Sainte-Chapelle</div>
+        <div class="detail">8 Boulevard du Palais, Île de la Cité — a 10-minute walk from the Louvre</div>
+      </div>
+      <div class="item open">
+        <div class="time">Evening</div>
+        <div class="what">Open — activities to come</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tuesday, July 28 -->
+  <div class="day paris">
+    <div class="day-marker">
+      <div class="dow">Tue</div>
+      <div class="date">28</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Back to London</span>
+      <div class="day-title">Au Revoir, Paris</div>
+      <div class="item">
+        <div class="time">Morning</div>
+        <div class="what">🧳 Check out of Le Grand Mazarin</div>
+      </div>
+      <div class="item">
+        <div class="time">11:30 AM</div>
+        <div class="what">🎨 Visit the Musée d'Orsay</div>
+        <div class="detail">Esplanade Valéry Giscard d'Estaing, 75007 — on the Left Bank, across the Seine</div>
+      </div>
+      <div class="item">
+        <div class="time">6:02 PM</div>
+        <div class="what">🚄 Eurostar — Paris Gare du Nord → London St Pancras</div>
+        <div class="detail">Back to the South Kensington Airbnb tonight</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-break">&#10022; &#10022; &#10022;</div>
+
+  <!-- Wednesday, July 29 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Wed</div>
+      <div class="date">29</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">London</span>
+      <div class="day-title">London</div>
+      <div class="item open">
+        <div class="time">Daytime</div>
+        <div class="what">Open — activities to come</div>
+      </div>
+      <div class="item">
+        <div class="time">7:00 PM</div>
+        <div class="what">🍽️ Dinner at Dishoom Kensington</div>
+        <div class="detail">4 Derry Street, Kensington — table for 6, a short walk from the Airbnb</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Thursday, July 30 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Thu</div>
+      <div class="date">30</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Hotel Night</span>
+      <div class="day-title">Move to Marylebone</div>
+      <div class="item">
+        <div class="time">11:00 AM</div>
+        <div class="what">🧳 Check out of the Airbnb</div>
+      </div>
+      <div class="item">
+        <div class="time">Afternoon</div>
+        <div class="what">🏨 Check in to Holmes Hotel, Marylebone</div>
+        <div class="detail">One night — ask the concierge to confirm tomorrow's Heathrow transfer</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Friday, July 31 -->
+  <div class="day">
+    <div class="day-marker">
+      <div class="dow">Fri</div>
+      <div class="date">31</div>
+      <div class="month">July</div>
+    </div>
+    <div class="day-line"></div>
+    <div class="day-body">
+      <span class="badge">Homeward</span>
+      <div class="day-title">Fly Home</div>
+      <div class="item">
+        <div class="time">Late Morning</div>
+        <div class="what">🚗 Hotel transfer to Heathrow</div>
+        <div class="detail">Arranged by the Holmes Hotel concierge — plan to arrive ~3 hours before the flight</div>
+      </div>
+      <div class="item">
+        <div class="time">3:35 PM</div>
+        <div class="what">✈️ British Airways 121 — London Heathrow → Cincinnati (CVG)</div>
+        <div class="detail">Safe travels home!</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    More activities coming soon &mdash; bon voyage! ✈️
+  </footer>
+
+</div>
+</body>
+</html>
